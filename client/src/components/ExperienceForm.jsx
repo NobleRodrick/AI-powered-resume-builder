@@ -161,7 +161,7 @@ const ExperienceForm = ({ data, onChange }) => {
                     disabled={
                       generatingIndex === index ||
                       !experience.position ||
-                      experience.company
+                      !experience.company
                     }
                     className="flex items-center gap-1 px-2 py-1 text-xs bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition-colors disabled:opacity-50"
                   >
