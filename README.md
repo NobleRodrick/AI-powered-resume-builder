@@ -14,8 +14,8 @@ This application is an AI-powered resume builder designed to help users create p
 ## Technology Stack
 
 - **Frontend**: React
-- **AI Integration**: [Specify your AI service]
-- **Styling**: [Your CSS framework]
+- **AI Integration**: gemini api
+- **Styling**: tailwindcss
 
 ## How It Works
 
