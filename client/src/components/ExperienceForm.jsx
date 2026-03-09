@@ -39,7 +39,7 @@ const ExperienceForm = ({ data, onChange }) => {
 
     try {
       const { data } = await api.post(
-        "api/ai/enhance-job-desc",
+        "/api/ai/enhance-job-desc",
         { userContent: prompt },
         { headers: { Authorization: token } },
       );
