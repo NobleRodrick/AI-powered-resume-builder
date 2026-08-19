@@ -1,5 +1,5 @@
-import { Briefcase, Loader2, Plus, Sparkles, Trash2 } from "lucide-react";
 import React, { useState } from "react";
+import { Briefcase, Loader2, Plus, Sparkles, Trash2 } from "lucide-react";
 import { useSelector } from "react-redux";
 import api from "../configs/api.js";
 import toast from "react-hot-toast";
@@ -114,22 +114,28 @@ const ExperienceForm = ({ data, onChange }) => {
                 />
 
                 <input
+                  aria-label="Start date"
                   value={experience.start_date || ""}
                   onChange={(e) =>
                     updateExperience(index, "start_date", e.target.value)
                   }
                   type="month"
-                  className="px-3 py-2 text-sm rounded-lg"
+                  min="1900-01"
+                  max="2100-12"
+                  className="w-full px-3 py-2 text-sm rounded-lg bg-white cursor-pointer"
                 />
 
                 <input
+                  aria-label="End date"
                   value={experience.end_date || ""}
-                  disabled={experience.is_current}
+                  disabled={Boolean(experience.is_current)}
                   onChange={(e) =>
                     updateExperience(index, "end_date", e.target.value)
                   }
                   type="month"
-                  className="px-3 py-2 text-sm rounded-lg disabled:bg-gray-100"
+                  min={experience.start_date || "1900-01"}
+                  max="2100-12"
+                  className="w-full px-3 py-2 text-sm rounded-lg bg-white cursor-pointer disabled:bg-gray-100 disabled:cursor-not-allowed"
                 />
               </div>
 
@@ -158,12 +164,17 @@ const ExperienceForm = ({ data, onChange }) => {
                   </label>
                   <button
                     onClick={() => generateDescription(index)}
+                    type="button"
                     disabled={
                       generatingIndex === index ||
-                      !experience.position ||
-                      !experience.company
+                      !experience.position?.trim() ||
+                      !experience.company?.trim()
                     }
-                    className="flex items-center gap-1 px-2 py-1 text-xs bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition-colors disabled:opacity-50"
+                    className={`flex items-center gap-1 px-2 py-1 text-xs rounded transition-colors ${
+                      generatingIndex === index
+                        ? "bg-purple-200 text-purple-400 cursor-wait"
+                        : "bg-purple-600 text-white hover:bg-purple-700"
+                    } disabled:opacity-50`}
                   >
                     {generatingIndex === index ? (
                       <Loader2 className="w-3 h-3 animate-spin" />

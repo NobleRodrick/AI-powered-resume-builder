@@ -6,26 +6,54 @@ const TemplateSelector = ({ selectedTemplate, onChange }) => {
 
   const templates = [
     {
+      id: "novo-modern",
+      name: "NovoResume Modern Specialist",
+      preview: "2-column sidebar design with visual skill pills, language levels, and social profile links",
+    },
+    {
+      id: "novo-executive",
+      name: "NovoResume Executive Leader",
+      preview: "High-impact dark executive banner with strategic competencies grid and leadership summary",
+    },
+    {
       id: "classic",
-      name: "Classic",
-      preview:
-        "A clean, traditional resume format with clear sections and professional typography",
+      name: "Classic Standard",
+      preview: "Traditional resume format with clear section dividers and standard layout",
+    },
+    {
+      id: "harvard",
+      name: "Harvard Ivy League",
+      preview: "Timeless serif design preferred by top law, finance, and corporate executive recruiters",
+    },
+    {
+      id: "academic-cv",
+      name: "Academic CV (Multi-Page)",
+      preview: "Comprehensive layout for research publications, grants, teaching, and academic references",
+    },
+    {
+      id: "ats-clean",
+      name: "100% ATS Clean",
+      preview: "Monochrome Applicant Tracking System compliant layout guaranteed to parse 100%",
+    },
+    {
+      id: "official-letterhead",
+      name: "Official Institutional Letterhead",
+      preview: "Formal document layout for Recommendation Letters, SOPs, Cover Letters, and Transcripts",
     },
     {
       id: "modern",
-      name: "Modern",
-      preview:
-        "Sleek design with a strategic use of color and modern font choices",
+      name: "Modern Executive",
+      preview: "Sleek design with strategic accent colors and bold modern font choices",
     },
     {
       id: "minimal-image",
-      name: "Minimal Image",
-      preview: "Minimal design with a single image and clean typography",
+      name: "Minimalist Photo",
+      preview: "Clean, elegant layout with profile photo accent",
     },
     {
       id: "minimal",
-      name: "Minimal",
-      preview: "Ultra-clean design that puts your content front and center",
+      name: "Minimalist Clean",
+      preview: "Ultra-clean design that puts your core achievements front and center",
     },
   ];
 

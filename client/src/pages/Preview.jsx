@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Loader from "../components/Loader";
 import ResumePreview from "../components/ResumePreview";
@@ -11,7 +11,7 @@ const Preview = () => {
 
   const [resumeData, setResumeData] = useState(null);
 
-  const loadResume = async () => {
+  const loadResume = useCallback(async () => {
     try {
       const { data } = await api.get("/api/resumes/public/" + resumeId);
       setResumeData(data.resume);
@@ -20,11 +20,11 @@ const Preview = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [resumeId]);
 
   useEffect(() => {
     loadResume();
-  }, []);
+  }, [loadResume]);
 
   return resumeData ? (
     <div className="bg-slate-100 ">

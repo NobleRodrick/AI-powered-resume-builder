@@ -7,7 +7,7 @@ import {
   UploadCloud,
   XIcon,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../configs/api.js";
 import { useSelector } from "react-redux";
@@ -15,7 +15,7 @@ import toast from "react-hot-toast";
 import pdfToText from "react-pdftotext";
 
 const Dashboard = () => {
-  const { user, token } = useSelector((state) => state.auth);
+  const { token } = useSelector((state) => state.auth);
 
   const colors = ["#9333ea", "#d97706", "#dc2626", "#0284c7", "#16a34a"];
   const [allResumes, setAllResumes] = useState([]);
@@ -27,7 +27,7 @@ const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const loadAllResumes = async () => {
+  const loadAllResumes = useCallback(async () => {
     try {
       const { data } = await api.get("/api/users/resumes", {
         headers: {
@@ -38,7 +38,7 @@ const Dashboard = () => {
     } catch (error) {
       toast.error(error?.response?.data?.message || error.message);
     }
-  };
+  }, [token]);
 
   const createResume = async (event) => {
     try {
@@ -128,7 +128,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     loadAllResumes();
-  }, []);
+  }, [loadAllResumes]);
 
   return (
     <div>

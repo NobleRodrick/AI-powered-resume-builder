@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { useCallback } from "react";
 import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Layout from "./pages/Layout";
@@ -14,7 +15,7 @@ import { Toaster } from "react-hot-toast";
 const App = () => {
   const dispatch = useDispatch();
 
-  const getUserData = async () => {
+  const getUserData = useCallback(async () => {
     const token = localStorage.getItem("token");
     try {
       if (token) {
@@ -32,11 +33,11 @@ const App = () => {
       dispatch(setLoading(false));
       console.log(error.message);
     }
-  };
+  }, [dispatch]);
 
   useEffect(() => {
     getUserData();
-  }, []);
+  }, [getUserData]);
 
   return (
     <>

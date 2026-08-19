@@ -1,8 +1,14 @@
 import React from "react";
-import ClassicTemplate from "./templates/ClassicTemplate.jsx";
-import ModernTemplate from "./templates/ModernTemplate.jsx";
-import MinimalTemplate from "./templates/MinimalTemplate.jsx";
-import MinimalImageTemplate from "./templates/MinimalImageTemplate.jsx";
+import ClassicTemplate from "./templates/ClassicTemplate";
+import ModernTemplate from "./templates/ModernTemplate";
+import MinimalTemplate from "./templates/MiniMalTemplate";
+import MinimalImageTemplate from "./templates/MinimalImageTemplate";
+import HarvardTemplate from "./templates/HarvardTemplate";
+import AcademicCVTemplate from "./templates/AcademicCVTemplate";
+import ATSCleanTemplate from "./templates/ATSCleanTemplate";
+import OfficialLetterheadTemplate from "./templates/OfficialLetterheadTemplate";
+import NovoModernTemplate from "./templates/NovoModernTemplate";
+import NovoExecutiveTemplate from "./templates/NovoExecutiveTemplate";
 
 const ResumePreview = ({ data, template, accentColor, classes = "" }) => {
   const renderTemplate = () => {
@@ -13,6 +19,18 @@ const ResumePreview = ({ data, template, accentColor, classes = "" }) => {
         return <MinimalTemplate data={data} accentColor={accentColor} />;
       case "minimal-image":
         return <MinimalImageTemplate data={data} accentColor={accentColor} />;
+      case "harvard":
+        return <HarvardTemplate data={data} accentColor={accentColor} />;
+      case "academic-cv":
+        return <AcademicCVTemplate data={data} accentColor={accentColor} />;
+      case "ats-clean":
+        return <ATSCleanTemplate data={data} accentColor={accentColor} />;
+      case "official-letterhead":
+        return <OfficialLetterheadTemplate data={data} accentColor={accentColor} />;
+      case "novo-modern":
+        return <NovoModernTemplate data={data} accentColor={accentColor} />;
+      case "novo-executive":
+        return <NovoExecutiveTemplate data={data} accentColor={accentColor} />;
 
       default:
         return <ClassicTemplate data={data} accentColor={accentColor} />;
@@ -24,24 +42,22 @@ const ResumePreview = ({ data, template, accentColor, classes = "" }) => {
       <div
         id="resume-preview"
         className={
-          "border border-gray-200 print:shadow-none print:border-none" + classes
+          "border border-gray-200 print:shadow-none print:border-none " + classes
         }
       >
         {renderTemplate()}
       </div>
 
-      <style jsx>
+      <style>
         {`
           @page {
-            size: letter;
-            margin: 0;
+            size: letter portrait;
+            margin: 0.5in;
           }
           @media print {
-            html,
             body {
-              width: 8.5in;
-              height: 11in;
-              overflow: hidden;
+              background: #ffffff !important;
+              color: #000000 !important;
             }
             body * {
               visibility: hidden;
@@ -57,6 +73,7 @@ const ResumePreview = ({ data, template, accentColor, classes = "" }) => {
               width: 100%;
               height: auto;
               padding: 0;
+              margin: 0;
               box-shadow: none !important;
               border: none !important;
             }
