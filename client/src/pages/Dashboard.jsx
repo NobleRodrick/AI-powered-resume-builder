@@ -35,7 +35,7 @@ const Dashboard = () => {
   // Document creation form state
   const [docTitle, setDocTitle] = useState("");
   const [docType, setDocType] = useState("resume");
-  const [docTemplate, setDocTemplate] = useState("novo-modern");
+  const [docTemplate, setDocTemplate] = useState("neura-modern");
 
   // Filtering & Search
   const [searchQuery, setSearchQuery] = useState("");
@@ -48,7 +48,7 @@ const Dashboard = () => {
 
   const loadAllResumes = useCallback(async () => {
     try {
-      const { data } = await api.get("/api/users/resumes", {
+      const { data } = await api.get("/api/resumes/get", {
         headers: { Authorization: token },
       });
       setAllResumes(data.resumes || []);
@@ -57,32 +57,33 @@ const Dashboard = () => {
     }
   }, [token]);
 
-  const handleOpenCreate = (type = "resume", template = "novo-modern", defaultTitle = "") => {
+  const handleOpenCreate = (type = "resume", template = "neura-modern", defaultTitle = "") => {
     setDocType(type);
     setDocTemplate(template);
     setDocTitle(defaultTitle);
     setShowCreateModal(true);
   };
 
-  const createDocument = async (event) => {
-    event.preventDefault();
+  const handleCreateDocument = async (e) => {
+    e.preventDefault();
+    if (!docTitle.trim()) {
+      toast.error("Please enter a title");
+      return;
+    }
     setIsLoading(true);
     try {
       const { data } = await api.post(
         "/api/resumes/create",
-        { 
-          title: docTitle || "Untitled Document", 
-          document_type: docType, 
-          template: docTemplate 
-        },
         {
-          headers: { Authorization: token },
-        }
+          title: docTitle,
+          document_type: docType,
+          template: docTemplate,
+        },
+        { headers: { Authorization: token } }
       );
-      setAllResumes([...allResumes, data.resume]);
-      setDocTitle("");
+      toast.success(data.message);
       setShowCreateModal(false);
-      toast.success("Document created!");
+      setDocTitle("");
       navigate(`/app/builder/${data.resume._id}`);
     } catch (error) {
       toast.error(error?.response?.data?.message || error.message);
@@ -91,12 +92,13 @@ const Dashboard = () => {
     }
   };
 
-  const uploadResume = async (event) => {
-    event.preventDefault();
+  const uploadResume = async (e) => {
+    e.preventDefault();
     if (!resume) {
-      toast.error("Please select a PDF file");
+      toast.error("Please select a resume file");
       return;
     }
+
     setIsLoading(true);
     try {
       const resumeText = await pdfToText(resume);
@@ -111,7 +113,12 @@ const Dashboard = () => {
       setResume(null);
       setShowUploadResume(false);
       toast.success("Resume imported successfully!");
-      navigate(`/app/builder/${data.resume._id}`);
+      const targetId = data.resumeId || data.resume?._id;
+      if (targetId) {
+        navigate(`/app/builder/${targetId}`);
+      } else {
+        loadAllResumes();
+      }
     } catch (error) {
       toast.error(error?.response?.data?.message || error.message);
     } finally {
@@ -167,7 +174,7 @@ const Dashboard = () => {
       gradient: "from-blue-600 to-indigo-600",
       bgHover: "hover:border-blue-500 hover:shadow-blue-100",
       badge: "Most Popular",
-      template: "novo-modern",
+      template: "neura-modern",
       docType: "resume",
     },
     {
@@ -532,7 +539,7 @@ const Dashboard = () => {
                       } else if (selected === "cv") {
                         setDocTemplate("academic-cv");
                       } else {
-                        setDocTemplate("novo-modern");
+                        setDocTemplate("neura-modern");
                       }
                     }}
                     className="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all"
@@ -553,8 +560,8 @@ const Dashboard = () => {
                     onChange={(e) => setDocTemplate(e.target.value)}
                     className="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all"
                   >
-                    <option value="novo-modern">NovoResume Modern Specialist</option>
-                    <option value="novo-executive">NovoResume Executive Leader</option>
+                    <option value="neura-modern">Neura Modern Specialist</option>
+                    <option value="neura-executive">Neura Executive Leader</option>
                     <option value="harvard">Harvard Ivy League Serif</option>
                     <option value="ats-clean">100% ATS Clean Monochrome</option>
                     <option value="official-letterhead">Official Institutional Letterhead</option>

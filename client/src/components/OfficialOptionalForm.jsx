@@ -87,7 +87,7 @@ const OptionalSectionsForm = ({ data, onChange }) => {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-semibold text-gray-900">NovoResume Optional & Custom Sections</h3>
+        <h3 className="text-lg font-semibold text-gray-900">Neura Optional & Custom Sections</h3>
         <p className="text-sm text-gray-500">
           Add Certifications, Professional Social Profiles, Custom Sections, and Passions
         </p>

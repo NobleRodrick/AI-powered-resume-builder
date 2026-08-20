@@ -14,7 +14,7 @@ export const createResume = async (req, res) => {
         const newResume = await Resume.create({ 
             userId, 
             title: title || "Untitled Document", 
-            template: template || "novo-modern", 
+            template: template || "neura-modern", 
             document_type: document_type || "resume" 
         })
 

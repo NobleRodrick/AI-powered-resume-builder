@@ -11,15 +11,19 @@ const OfficialLetterheadTemplate = ({ data, accentColor = "#1e3a8a" }) => {
     year: "numeric",
   });
 
+  const logoSrc = typeof letterhead.logo_url === "object" && letterhead.logo_url
+    ? URL.createObjectURL(letterhead.logo_url)
+    : letterhead.logo_url;
+
   return (
     <div className="max-w-4xl mx-auto p-12 bg-white text-gray-900 font-serif leading-relaxed shadow-sm min-h-[11in] flex flex-col justify-between">
       <div>
         {/* Institutional Letterhead Header */}
         <header className="border-b-2 pb-6 mb-8 flex justify-between items-start" style={{ borderColor: accentColor }}>
           <div className="flex items-center gap-4">
-            {letterhead.logo_url && (
+            {logoSrc && (
               <img
-                src={letterhead.logo_url}
+                src={logoSrc}
                 alt="Institutional Logo"
                 className="h-16 w-auto object-contain"
               />

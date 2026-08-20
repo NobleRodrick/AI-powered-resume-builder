@@ -59,7 +59,7 @@ const initialResumeData = {
   letterhead: {},
   signature_url: "",
   document_body: "",
-  template: "novo-modern",
+  template: "neura-modern",
   accent_color: "#3B82F6",
   public: false,
 };
@@ -250,7 +250,7 @@ const ResumeBuilder = () => {
 
               <div className="flex justify-between items-center my-4 border-b border-gray-200 pb-3">
                 <div className="flex items-center gap-2">
-                  <TemplateSelector selectedTemplate={resumeData.template} onChange={(template) => setResumeData((prev) => ({ ...prev, template }))} />
+                  <TemplateSelector selectedTemplate={resumeData.template} documentType={resumeData.document_type} onChange={(template) => setResumeData((prev) => ({ ...prev, template }))} />
                   <ColorPicker selectedColor={resumeData.accent_color} onChange={(accent_color) => setResumeData((prev) => ({ ...prev, accent_color }))} />
                 </div>
                 <div className="flex items-center gap-1">

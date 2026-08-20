@@ -1,7 +1,7 @@
 import { Check, Layout, Search, Sparkles, X } from "lucide-react";
 import React, { useState, useRef, useEffect } from "react";
 
-const TemplateSelector = ({ selectedTemplate, onChange }) => {
+const TemplateSelector = ({ selectedTemplate, documentType = "resume", onChange }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -9,17 +9,19 @@ const TemplateSelector = ({ selectedTemplate, onChange }) => {
 
   const templates = [
     {
-      id: "novo-modern",
-      name: "NovoResume Modern Specialist",
+      id: "neura-modern",
+      name: "Neura Modern Specialist",
       category: "executive",
       tag: "Popular",
+      docTypes: ["resume", "cv"],
       preview: "2-column sidebar design with visual skill pills, language levels, and social profile links",
     },
     {
-      id: "novo-executive",
-      name: "NovoResume Executive Leader",
+      id: "neura-executive",
+      name: "Neura Executive Leader",
       category: "executive",
       tag: "Executive",
+      docTypes: ["resume", "cv"],
       preview: "High-impact dark executive banner with strategic competencies grid and leadership summary",
     },
     {
@@ -27,6 +29,7 @@ const TemplateSelector = ({ selectedTemplate, onChange }) => {
       name: "Modern Executive",
       category: "executive",
       tag: "Sleek",
+      docTypes: ["resume", "cv"],
       preview: "Sleek design with strategic accent colors and bold modern font choices",
     },
     {
@@ -34,6 +37,7 @@ const TemplateSelector = ({ selectedTemplate, onChange }) => {
       name: "Classic Standard",
       category: "academic",
       tag: "Standard",
+      docTypes: ["resume", "cv"],
       preview: "Traditional resume format with clear section dividers and standard layout",
     },
     {
@@ -41,6 +45,7 @@ const TemplateSelector = ({ selectedTemplate, onChange }) => {
       name: "Harvard Ivy League",
       category: "academic",
       tag: "Top Rated",
+      docTypes: ["resume", "cv"],
       preview: "Timeless serif design preferred by top law, finance, and corporate executive recruiters",
     },
     {
@@ -48,6 +53,7 @@ const TemplateSelector = ({ selectedTemplate, onChange }) => {
       name: "Academic CV (Multi-Page)",
       category: "academic",
       tag: "Multi-Page",
+      docTypes: ["cv", "academic_cv"],
       preview: "Comprehensive layout for research publications, grants, teaching, and academic references",
     },
     {
@@ -55,13 +61,15 @@ const TemplateSelector = ({ selectedTemplate, onChange }) => {
       name: "100% ATS Clean",
       category: "academic",
       tag: "100% ATS",
+      docTypes: ["resume", "cv"],
       preview: "Monochrome Applicant Tracking System compliant layout guaranteed to parse 100%",
     },
     {
       id: "official-letterhead",
       name: "Official Institutional Letterhead",
       category: "official",
-      tag: "Letter / SOP",
+      tag: "Official Letter / SOP",
+      docTypes: ["recommendation_letter", "statement_of_purpose", "cover_letter", "transcript_summary"],
       preview: "Formal document layout for Recommendation Letters, SOPs, Cover Letters, and Transcripts",
     },
     {
@@ -69,6 +77,7 @@ const TemplateSelector = ({ selectedTemplate, onChange }) => {
       name: "Minimalist Photo",
       category: "minimal",
       tag: "With Photo",
+      docTypes: ["resume", "cv"],
       preview: "Clean, elegant layout with profile photo accent",
     },
     {
@@ -76,6 +85,7 @@ const TemplateSelector = ({ selectedTemplate, onChange }) => {
       name: "Minimalist Clean",
       category: "minimal",
       tag: "Clean",
+      docTypes: ["resume", "cv", "recommendation_letter", "statement_of_purpose", "cover_letter"],
       preview: "Ultra-clean design that puts your core achievements front and center",
     },
   ];
@@ -99,7 +109,21 @@ const TemplateSelector = ({ selectedTemplate, onChange }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const filteredTemplates = templates.filter((t) => {
+  // Filter templates strictly by current document type first, then category and search query
+  const categoryTemplates = templates.filter((t) => {
+    // If it's a letter type, prioritize official and minimal templates
+    if (["recommendation_letter", "statement_of_purpose", "cover_letter", "transcript_summary"].includes(documentType)) {
+      return t.docTypes.includes(documentType) || t.category === "official";
+    }
+    // If it's CV, prioritize academic and executive templates
+    if (documentType === "cv" || documentType === "academic_cv") {
+      return t.docTypes.includes("cv") || t.docTypes.includes("academic_cv") || t.category === "academic";
+    }
+    // Default resume mode
+    return true;
+  });
+
+  const filteredTemplates = categoryTemplates.filter((t) => {
     const matchesCategory = selectedCategory === "all" || t.category === selectedCategory;
     const matchesSearch =
       t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||

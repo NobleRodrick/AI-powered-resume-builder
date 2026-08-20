@@ -7,11 +7,20 @@ import HarvardTemplate from "./templates/HarvardTemplate";
 import AcademicCVTemplate from "./templates/AcademicCVTemplate";
 import ATSCleanTemplate from "./templates/ATSCleanTemplate";
 import OfficialLetterheadTemplate from "./templates/OfficialLetterheadTemplate";
-import NovoModernTemplate from "./templates/NovoModernTemplate";
-import NovoExecutiveTemplate from "./templates/NovoExecutiveTemplate";
+import NeuraModernTemplate from "./templates/NeuraModernTemplate";
+import NeuraExecutiveTemplate from "./templates/NeuraExecutiveTemplate";
 
 const ResumePreview = ({ data, template, accentColor, classes = "" }) => {
+  const isLetterDoc = ["recommendation_letter", "statement_of_purpose", "cover_letter", "transcript_summary"].includes(
+    data?.document_type
+  );
+
   const renderTemplate = () => {
+    // If it's an official letter or SOP and template is default or letterhead, render Official Letterhead
+    if (isLetterDoc && (!template || template === "official-letterhead" || template === "classic")) {
+      return <OfficialLetterheadTemplate data={data} accentColor={accentColor} />;
+    }
+
     switch (template) {
       case "modern":
         return <ModernTemplate data={data} accentColor={accentColor} />;
@@ -27,12 +36,17 @@ const ResumePreview = ({ data, template, accentColor, classes = "" }) => {
         return <ATSCleanTemplate data={data} accentColor={accentColor} />;
       case "official-letterhead":
         return <OfficialLetterheadTemplate data={data} accentColor={accentColor} />;
+      case "neura-modern":
       case "novo-modern":
-        return <NovoModernTemplate data={data} accentColor={accentColor} />;
+        return <NeuraModernTemplate data={data} accentColor={accentColor} />;
+      case "neura-executive":
       case "novo-executive":
-        return <NovoExecutiveTemplate data={data} accentColor={accentColor} />;
+        return <NeuraExecutiveTemplate data={data} accentColor={accentColor} />;
 
       default:
+        if (data?.document_type === "cv") {
+          return <AcademicCVTemplate data={data} accentColor={accentColor} />;
+        }
         return <ClassicTemplate data={data} accentColor={accentColor} />;
     }
   };
