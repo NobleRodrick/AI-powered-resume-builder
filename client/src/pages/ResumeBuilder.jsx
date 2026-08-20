@@ -79,6 +79,16 @@ const ResumeBuilder = () => {
       if (data.resume) {
         setResumeData(data.resume);
         document.title = data.resume.title;
+
+        // Auto-select tab based on document type
+        const type = data.resume.document_type;
+        if (type === "recommendation_letter") {
+          setActiveSectionIndex(8); // Recommendation Letter tab
+        } else if (type === "cv") {
+          setActiveSectionIndex(7); // Academic CV tab
+        } else if (type === "statement_of_purpose" || type === "cover_letter") {
+          setActiveSectionIndex(9); // Official Docs tab
+        }
       }
     } catch (error) {
       console.log(error.message);

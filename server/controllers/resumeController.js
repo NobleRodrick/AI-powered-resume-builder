@@ -8,10 +8,15 @@ import fs from "fs"
 export const createResume = async (req, res) => {
     try {
         const userId = req.userId
-        const { title } = req.body
+        const { title, template, document_type } = req.body
 
         // Create new resume
-        const newResume = await Resume.create({ userId, title })
+        const newResume = await Resume.create({ 
+            userId, 
+            title: title || "Untitled Document", 
+            template: template || "novo-modern", 
+            document_type: document_type || "resume" 
+        })
 
         // return success message
         return res.status(201).json({ message: "Resume created successfully", resume: newResume })
