@@ -11,16 +11,19 @@ const ProfessionalSummaryForm = ({ data, onChange, setResumeData }) => {
   const generateSummary = async () => {
     try {
       setIsGenerating(true);
-      const prompt = `enahance this professional summary "${data}"`;
+      const prompt = `Enhance this professional summary: "${data || 'Experienced professional with a proven track record.'}". Make it compelling, ATS-friendly, and highlight key leadership and technical skills in 2-3 sentences.`;
       const response = await api.post(
         "/api/ai/enhance-pro-sum",
         { userContent: prompt },
         { headers: { Authorization: token } },
       );
-      setResumeData((prev) => ({
-        ...prev,
-        professional_summary: response.data.enhancedContent,
-      }));
+      if (response.data?.enhancedContent) {
+        setResumeData((prev) => ({
+          ...prev,
+          professional_summary: response.data.enhancedContent,
+        }));
+        toast.success("Summary enhanced with AI!");
+      }
     } catch (error) {
       toast.error(error?.response?.data?.message || error.message);
     } finally {
@@ -36,34 +39,40 @@ const ProfessionalSummaryForm = ({ data, onChange, setResumeData }) => {
             Professional Summary
           </h3>
           <p className="text-sm text-gray-500">
-            Add summary for your resume here
+            Write a concise executive summary or bio
           </p>
         </div>
+        
+        {/* Vibrant Glowing AI Enhance Button */}
         <button
           disabled={isGenerating}
           onClick={generateSummary}
-          className="flex items-center gap-2 px-3 py-1 text-sm bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition-colors disabled:opacity-50"
+          type="button"
+          className={`flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold rounded-lg shadow-md transition-all duration-300 cursor-pointer ${
+            isGenerating
+              ? "bg-purple-400 text-white opacity-50 animate-pulse cursor-wait"
+              : "bg-gradient-to-r from-purple-600 via-indigo-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white hover:shadow-lg transform hover:scale-[1.02] active:scale-95"
+          }`}
         >
           {isGenerating ? (
             <Loader2 className="size-4 animate-spin" />
           ) : (
-            <Sparkles className="size-4" />
+            <Sparkles className="size-4 text-amber-300 animate-bounce" />
           )}
-          {isGenerating ? "Enhancing..." : "AI Enhance"}
+          <span>{isGenerating ? "AI Enhancing..." : "AI Enhance"}</span>
         </button>
       </div>
 
-      <div className="mt-6">
+      <div className="mt-4 space-y-2">
         <textarea
           value={data || ""}
           onChange={(e) => onChange(e.target.value)}
           rows={7}
-          className="w-full p-3 px-4 mt-2 border text-sm border-gray-300 rounded-lg focus:ring focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors resize-none"
-          placeholder="Write a compelling professional summary that highlights your key strengths and career objectives..."
+          className="w-full p-3.5 border text-xs border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-colors resize-none leading-relaxed bg-white"
+          placeholder="Write a compelling professional summary that highlights your key strengths, domain expertise, and career goals..."
         />
-        <p className="text-xs text-gray-500 max-w-4/5 mx-auto text-center">
-          Tip: keep it concise (3-4 sentences) and focus on your most relevant
-          achievements and skills.
+        <p className="text-[11px] text-slate-500 text-center">
+          Tip: Keep it concise (2-4 sentences) focusing on high-level achievements and career focus.
         </p>
       </div>
     </div>

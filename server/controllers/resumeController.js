@@ -86,18 +86,18 @@ export const getPublicResumeById = async (req, res) => {
 export const updateResume = async (req, res) => {
     try {
         const userId = req.userId
-        const { resumeId, resumeData, removeBackground } = req.body
-        const image = req.file
+        const imageFile = req.files?.image?.[0] || (req.file?.fieldname === "image" ? req.file : null);
+        const logoFile = req.files?.logo?.[0] || (req.file?.fieldname === "logo" ? req.file : null);
 
         let resumeDataCopy;
-        if(typeof resumeData === "string") {
+        if (typeof resumeData === "string") {
             resumeDataCopy = await JSON.parse(resumeData)
-        }else{
+        } else {
             resumeDataCopy = structuredClone(resumeData)
         }
 
-        if (image) {
-            const imageBufferData = fs.createReadStream(image.path)
+        if (imageFile) {
+            const imageBufferData = fs.createReadStream(imageFile.path)
 
             const response = await imagekit.files.upload({
                 file: imageBufferData,
@@ -108,7 +108,21 @@ export const updateResume = async (req, res) => {
                 }
             })
 
+            if (!resumeDataCopy.personal_info) resumeDataCopy.personal_info = {};
             resumeDataCopy.personal_info.image = response.url
+        }
+
+        if (logoFile) {
+            const logoBufferData = fs.createReadStream(logoFile.path)
+
+            const response = await imagekit.files.upload({
+                file: logoBufferData,
+                fileName: "logo.png",
+                folder: "user-logos"
+            })
+
+            if (!resumeDataCopy.letterhead) resumeDataCopy.letterhead = {};
+            resumeDataCopy.letterhead.logo_url = response.url
         }
 
         const resume = await Resume.findOneAndUpdate({ userId, _id: resumeId }, resumeDataCopy, {
