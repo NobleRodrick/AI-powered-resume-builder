@@ -85,7 +85,8 @@ export const getPublicResumeById = async (req, res) => {
 // PUT: /api/resumes/update
 export const updateResume = async (req, res) => {
     try {
-        const userId = req.userId
+                const userId = req.userId
+        const { resumeId, resumeData, removeBackground } = req.body
         const imageFile = req.files?.image?.[0] || (req.file?.fieldname === "image" ? req.file : null);
         const logoFile = req.files?.logo?.[0] || (req.file?.fieldname === "logo" ? req.file : null);
 
