@@ -1,4 +1,6 @@
 import React from "react";
+import ProfileImage from "../ProfileImage";
+
 const NeuraExecutiveTemplate = ({ data }) => {
   const formatDate = (dateStr) => {
     if (!dateStr) return "";
@@ -34,8 +36,8 @@ const NeuraExecutiveTemplate = ({ data }) => {
         </div>
 
         {data.personal_info?.image && (
-          <img
-            src={data.personal_info.image}
+          <ProfileImage
+            image={data.personal_info.image}
             alt="Executive Headshot"
             className="w-24 h-24 rounded-lg object-cover border-2 border-white/30 shrink-0"
           />

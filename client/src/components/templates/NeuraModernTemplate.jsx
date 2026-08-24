@@ -1,5 +1,6 @@
 import React from "react";
 import { Mail, Phone, MapPin, Linkedin, Globe, Award, CheckCircle, Github, Twitter, Code } from "lucide-react";
+import ProfileImage from "../ProfileImage";
 
 const NeuraModernTemplate = ({ data, accentColor = "#2563eb" }) => {
   const formatDate = (dateStr) => {
@@ -19,15 +20,15 @@ const NeuraModernTemplate = ({ data, accentColor = "#2563eb" }) => {
   const languages = data.languages || [];
 
   return (
-    <div className="max-w-4xl mx-auto bg-white text-gray-900 font-sans shadow-md grid grid-cols-12 min-h-[11in]">
+    <div className="max-w-4xl mx-auto bg-white text-gray-900 font-sans shadow-md grid grid-cols-12 ">
       {/* Left Sidebar (35% width) */}
       <div className="col-span-4 p-6 bg-slate-900 text-white flex flex-col justify-between">
         <div className="space-y-6">
           {/* Profile Picture */}
           {data.personal_info?.image && (
             <div className="flex justify-center">
-              <img
-                src={data.personal_info.image}
+              <ProfileImage
+                image={data.personal_info.image}
                 alt="Profile"
                 className="w-28 h-28 rounded-full object-cover border-4 border-white/20 shadow-md"
               />
