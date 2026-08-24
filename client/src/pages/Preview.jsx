@@ -27,8 +27,8 @@ const Preview = () => {
   }, [loadResume]);
 
   return resumeData ? (
-    <div className="bg-slate-100 ">
-      <div className="max-w-3xl mx-auto py-10">
+    <div className="bg-slate-100 print:bg-white print:m-0 print:p-0">
+      <div className="max-w-3xl mx-auto py-10 print:max-w-none print:mx-0 print:py-0">
         <ResumePreview
           data={resumeData}
           template={resumeData.template}
