@@ -22,7 +22,7 @@ const NeuraModernTemplate = ({ data, accentColor = "#2563eb" }) => {
   return (
     <div className="max-w-4xl mx-auto bg-white text-gray-900 font-sans shadow-md grid grid-cols-12 ">
       {/* Left Sidebar (35% width) */}
-      <div className="col-span-4 p-6 bg-slate-900 text-white flex flex-col justify-between">
+      <div className="resume-sidebar col-span-4 p-6 bg-slate-900 text-white flex flex-col justify-between">
         <div className="space-y-6">
           {/* Profile Picture */}
           {data.personal_info?.image && (

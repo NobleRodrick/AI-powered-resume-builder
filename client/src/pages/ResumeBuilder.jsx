@@ -20,6 +20,7 @@ import {
   User,
 } from "lucide-react";
 import { useSelector } from "react-redux";
+import html2pdf from "html2pdf.js";
 import toast from "react-hot-toast";
 import PersonalInfoForm from "../components/PersonalInfoForm";
 import ResumePreview from "../components/ResumePreview";
@@ -191,6 +192,46 @@ const ResumeBuilder = () => {
     }
   };
 
+  const handleDownload = async () => {
+    const preview = document.getElementById("resume-preview");
+    if (!preview) {
+      toast.error("Document preview is not available");
+      return;
+    }
+
+    const safeName = (resumeData.personal_info?.full_name || resumeData.title || "resume")
+      .replace(/[^a-z0-9]+/gi, "-")
+      .replace(/^-+|-+$/g, "")
+      .toLowerCase() || "resume";
+
+    const options = {
+      margin: 0,
+      filename: `${safeName}.pdf`,
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#ffffff",
+        logging: false,
+      },
+      jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+      pagebreak: { mode: ["css", "legacy"] },
+    };
+
+    try {
+      await toast.promise(
+        html2pdf().set(options).from(preview).save(),
+        {
+          loading: "Preparing PDF...",
+          success: "PDF downloaded",
+          error: "Could not create PDF",
+        }
+      );
+    } catch (error) {
+      console.error("PDF generation failed:", error);
+    }
+  };
+
   // Document Badge Info
   const getDocBadge = (type) => {
     switch (type) {
@@ -294,7 +335,7 @@ const ResumeBuilder = () => {
                   {resumeData.public ? <EyeIcon className="size-4" /> : <EyeOffIcon className="size-4" />}
                   {resumeData.public ? "Public" : "Private"}
                 </button>
-                <button type="button" onClick={() => window.print()} className="flex items-center p-2 px-4 gap-2 text-xs bg-gradient-to-br from-green-100 to-green-200 text-green-600 rounded-lg ring-green-300 hover:ring transition-colors"><DownloadIcon className="size-4" /> Download</button>
+                <button type="button" onClick={handleDownload} className="flex items-center p-2 px-4 gap-2 text-xs bg-gradient-to-br from-green-100 to-green-200 text-green-600 rounded-lg ring-green-300 hover:ring transition-colors"><DownloadIcon className="size-4" /> Download</button>
               </div>
               <ResumePreview data={resumeData} template={resumeData.template} accentColor={resumeData.accent_color} />
             </div>

@@ -90,4 +90,10 @@
     break-inside: avoid-page;
     page-break-inside: avoid;
   }
+
+  /* The sidebar should occupy only its own content height; otherwise CSS grid can
+     repeat its background as a blank column on every continuation page. */
+  #resume-preview .resume-sidebar {
+    align-self: start;
+  }
 }
