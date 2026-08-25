@@ -157,7 +157,7 @@ const NeuraModernTemplate = ({ data, accentColor = "#2563eb" }) => {
 
             <div className="space-y-4">
               {data.experience.map((exp, index) => (
-                <div key={index} className="text-xs space-y-1">
+                <div key={index} className="resume-entry text-xs space-y-1">
                   <div className="flex justify-between font-bold text-gray-900">
                     <span className="text-sm">{exp.position}</span>
                     <span className="text-gray-500 font-normal">
@@ -188,7 +188,7 @@ const NeuraModernTemplate = ({ data, accentColor = "#2563eb" }) => {
 
             <div className="space-y-3">
               {data.education.map((edu, index) => (
-                <div key={index} className="text-xs">
+                <div key={index} className="resume-entry text-xs">
                   <div className="flex justify-between font-bold text-gray-900">
                     <span>{edu.degree} {edu.field && `in ${edu.field}`}</span>
                     <span className="text-gray-500 font-normal">
@@ -218,7 +218,7 @@ const NeuraModernTemplate = ({ data, accentColor = "#2563eb" }) => {
 
             <div className="grid grid-cols-2 gap-2 text-xs">
               {certifications.map((cert, idx) => (
-                <div key={idx} className="p-2 border border-gray-200 rounded-md bg-gray-50">
+                <div key={idx} className="resume-entry p-2 border border-gray-200 rounded-md bg-gray-50">
                   <div className="font-bold text-gray-900 flex items-center gap-1">
                     <CheckCircle className="size-3 text-green-600 shrink-0" />
                     {cert.name}
@@ -242,7 +242,7 @@ const NeuraModernTemplate = ({ data, accentColor = "#2563eb" }) => {
 
             <div className="space-y-2 text-xs">
               {data.project.map((proj, index) => (
-                <div key={index}>
+                <div key={index} className="resume-entry">
                   <span className="font-bold text-gray-900">{proj.name}: </span>
                   <span className="text-gray-700">{proj.description}</span>
                 </div>
@@ -262,7 +262,7 @@ const NeuraModernTemplate = ({ data, accentColor = "#2563eb" }) => {
             </h2>
             <div className="space-y-2 text-xs">
               {sec.items?.map((item, i) => (
-                <div key={i}>
+                <div key={i} className="resume-entry">
                   <div className="font-bold text-gray-900">{item.heading} {item.date && `(${item.date})`}</div>
                   {item.subheading && <div className="text-gray-700 italic">{item.subheading}</div>}
                   {item.description && <div className="text-gray-600">{item.description}</div>}
