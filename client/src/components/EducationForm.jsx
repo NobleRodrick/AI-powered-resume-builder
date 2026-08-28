@@ -2,6 +2,8 @@ import { GraduationCap, Plus, Trash2 } from "lucide-react";
 import React from "react";
 
 const EducationForm = ({ data, onChange }) => {
+  const [errors, setErrors] = React.useState({});
+
   const addEducation = () => {
     const newEducation = {
       institution: "",
@@ -27,7 +29,23 @@ const EducationForm = ({ data, onChange }) => {
 
   const updateEducation = (index, field, value) => {
     const updated = [...data];
-    updated[index] = { ...updated[index], [field]: value };
+    const entry = { ...updated[index], [field]: value };
+    updated[index] = entry;
+
+    // Validate dates
+    if (field === "start_date" || field === "graduation_date" || field === "is_current") {
+      const newErrors = { ...errors };
+      const start = entry.start_date;
+      const end = entry.is_current ? new Date().toISOString().slice(0, 7) : entry.graduation_date;
+
+      if (start && end && start > end) {
+        newErrors[index] = "Graduation date cannot be before start date";
+      } else {
+        delete newErrors[index];
+      }
+      setErrors(newErrors);
+    }
+
     onChange(updated);
   };
 
@@ -138,7 +156,9 @@ const EducationForm = ({ data, onChange }) => {
                       updateEducation(index, "start_date", e.target.value)
                     }
                     type="month"
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 bg-white"
+                    className={`w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 bg-white cursor-pointer ${
+                      errors[index] ? "border-red-500 ring-red-200" : "border-gray-300"
+                    }`}
                   />
                 </div>
 
@@ -151,10 +171,18 @@ const EducationForm = ({ data, onChange }) => {
                       updateEducation(index, "graduation_date", e.target.value)
                     }
                     type="month"
-                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 bg-white disabled:bg-gray-100"
+                    className={`w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 bg-white cursor-pointer disabled:bg-gray-100 disabled:cursor-not-allowed ${
+                      errors[index] ? "border-red-500 ring-red-200" : "border-gray-300"
+                    }`}
                   />
                 </div>
               </div>
+              {errors[index] && (
+                <p className="text-[10px] text-red-500 font-medium mt-1 flex items-center gap-1">
+                  <span className="w-1 h-1 bg-red-500 rounded-full"></span>
+                  {errors[index]}
+                </p>
+              )}
 
               <div className="flex items-center gap-2 pt-1">
                 <input

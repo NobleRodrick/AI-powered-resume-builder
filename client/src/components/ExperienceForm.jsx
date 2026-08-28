@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 const ExperienceForm = ({ data, onChange }) => {
   const { token } = useSelector((state) => state.auth);
   const [generatingIndex, setGeneratingIndex] = useState(-1);
+  const [errors, setErrors] = useState({});
 
   const addExperience = () => {
     const newExperience = {
@@ -28,7 +29,23 @@ const ExperienceForm = ({ data, onChange }) => {
 
   const updateExperience = (index, field, value) => {
     const updated = [...data];
-    updated[index] = { ...updated[index], [field]: value };
+    const entry = { ...updated[index], [field]: value };
+    updated[index] = entry;
+
+    // Validate dates
+    if (field === "start_date" || field === "end_date" || field === "is_current") {
+      const newErrors = { ...errors };
+      const start = entry.start_date;
+      const end = entry.is_current ? new Date().toISOString().slice(0, 7) : entry.end_date;
+
+      if (start && end && start > end) {
+        newErrors[index] = "End date cannot be before start date";
+      } else {
+        delete newErrors[index];
+      }
+      setErrors(newErrors);
+    }
+
     onChange(updated);
   };
 
@@ -143,7 +160,9 @@ const ExperienceForm = ({ data, onChange }) => {
                       value={experience.start_date || ""}
                       onChange={(e) => updateExperience(index, "start_date", e.target.value)}
                       type="month"
-                      className="w-full px-3.5 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white cursor-pointer"
+                      className={`w-full px-3.5 py-2 text-xs border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white cursor-pointer ${
+                        errors[index] ? "border-red-500 ring-red-200" : "border-slate-300"
+                      }`}
                     />
                   </div>
 
@@ -157,10 +176,18 @@ const ExperienceForm = ({ data, onChange }) => {
                       disabled={Boolean(experience.is_current)}
                       onChange={(e) => updateExperience(index, "end_date", e.target.value)}
                       type="month"
-                      className="w-full px-3.5 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white cursor-pointer disabled:bg-slate-100 disabled:cursor-not-allowed"
+                      className={`w-full px-3.5 py-2 text-xs border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white cursor-pointer disabled:bg-slate-100 disabled:cursor-not-allowed ${
+                        errors[index] ? "border-red-500 ring-red-200" : "border-slate-300"
+                      }`}
                     />
                   </div>
                 </div>
+                {errors[index] && (
+                  <p className="text-[10px] text-red-500 font-medium mt-1 flex items-center gap-1">
+                    <span className="w-1 h-1 bg-red-500 rounded-full"></span>
+                    {errors[index]}
+                  </p>
+                )}
 
                 <div className="flex items-center gap-2">
                   <input
